@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import './index.css';
+import './index.css'
 
+const ShowMostAnecdotes = ({anecdotes, point})=>{
+  const highest = Math.max(...point) 
+  const position = point.indexOf(highest)
+  // console.log(point)
+  // console.log('It is in position', position)
+  
+  return(
+    <p>{anecdotes[position]}</p>
+  )
+}
 
 
 const App = ({anecdotes}) => {
-  const [selected, setSelected] = useState()
+  const [selected, setSelected] = useState(0)
   const [point, setPoint] = useState(new Uint8Array(6)) 
- 
-
   
   const onClickHandler = ()=>{
     let num = Math.floor((Math.random() * (5 - 0 + 1)) + 0);
@@ -18,17 +26,18 @@ const App = ({anecdotes}) => {
   const clickToVote = ()=>{
     const copy = [...point]
     copy[selected] += 1
-    setPoint(copy)
-    console.log(copy)
-    
+    setPoint(copy) 
   }
 
   return (
     <div>
+      <h1>Anecdotes</h1>
       <p>{anecdotes[selected]}</p>
+      <p>Has {point[selected]} votes</p>
       <button onClick={clickToVote}>Vote</button>
       <button onClick={onClickHandler}>Next anecdote</button>
-      <p>Has {point[selected]} votes</p>
+      <h2>Anectodes with most votes</h2>
+      <ShowMostAnecdotes selected={selected} point={point} anecdotes={anecdotes}/>
     </div>
   )
 }
