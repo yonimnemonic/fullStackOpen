@@ -29,15 +29,18 @@ const App = () => {
     for(let user of persons){
       
       if(user.name.includes(newName) || user.number.includes(newNumber)){
+
         alert(`${newName}${newNumber} is already added to phonebook`)
         break
+
       }else{
         const addPerson = {
           name: newName,
           number: newNumber,
         }
-        setPersons(persons.concat(addPerson))
-
+        setPersons(persons.concat(addPerson));
+        newName(''); //element controlled by REACT nor by the DOM
+        newNumber(''); //element controlled by REACT nor by the DOM
         
        }
     }
@@ -48,16 +51,11 @@ const App = () => {
   //
    setFilter(event.target.value);
   
-   const regExpresion = new RegExp(filter, 'i')
+   const regExpresion = new RegExp(filter, 'i');
    const personFiltered = () => persons.filter( person => person.name.match(regExpresion));
-
-   if(regExpresion.length === 0){
-     setPersons()
-   }else{
-     setPersons(personFiltered);
-
-   }
-
+   setPersons(personFiltered);
+   
+  
    console.log(filter)  
        
   }
@@ -65,17 +63,16 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-        filter shown with <input onChange={Filter}></input>
+        filter shown with <input onChange={Filter} ></input>
         <p>We find: </p>
       <form onSubmit={PersonForm}>
           <h2>Add a New</h2>
-          name: <input onChange={handleNewPerson} /><br/>
-          number: <input onChange={handleNewNumber}/>
+          name: <input onChange={handleNewPerson} value={newName}/><br/>
+          number: <input onChange={handleNewNumber} value={newNumber}/>
           <button>add</button>
       </form>
       <h2>Numbers</h2>
       <p>{persons.map((name, i) => <li key={i}>{name.name}: {name.number}</li>)}<br></br></p>
-        {/* <AddUser onClick={event} persons={persons} setPersons={setPersons} newName={newName} setNewName={setNewName}/> */}
       <div>debugName: {newName}</div>
       <div>debugNumber: {newNumber}</div>
       ...
