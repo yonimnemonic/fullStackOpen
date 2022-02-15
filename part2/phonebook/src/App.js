@@ -14,7 +14,9 @@ const App = () => {
   
   
   
-  const [ persons, setPersons ] = useState([]) 
+  const [ persons, setPersons ] = useState([
+    {name: "Mari Popins", number: "42-425212512"}
+  ]) 
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ filter, setFilter ] = useState([]);

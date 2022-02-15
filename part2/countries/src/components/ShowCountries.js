@@ -1,52 +1,63 @@
-import React from  "react";
+import axios from "axios";
+import {React, useState, useEffect} from  "react";
+import { Weather } from '../components/Weather';
 
-const ShowCountries = ( {countries, filter} )=>{
+const ShowCountries = ( {countries, filter, setFilter} ) => {
 
-    console.log('filter en el componente ShowCountries', filter);
+          
+    const handleClickButton = (e) =>{
+        console.log('click', e.target.value);
+        //cambiar el valor de filter countries   
+    }
    
     if(filter.length >= 10){
-        console.log('estoy en el primer if');
+
         return(
             <>
-                We find: <p>Plese, select no more than 10 countries.</p> 
-            </>
-            
+                We find:
+                { 
+                filter.map( filter => 
+                <p key={filter.name.common}>{filter.name.common} <button value={filter.name.common} onClick={ handleClickButton }>Show</button>
+                </p>
+                 ) 
+                }
+            </>     
       )
-  }else if(filter.length === 1  ){
-		console.log('estoy en el segundo if');
-		return(
+  }else if(filter.length === 1 ){
+      return(
+          <>
+          
 					<div>
 					
 						We find: { filter.map( filter => 
 							<>
 								<h3 key={filter.name.common}>{filter.name.common}</h3>
 								<p> Capital: {filter.capital}</p>
-								<p> Population: {filter.population}</p>
+								<p> Population: {filter.population} </p>
 								<h4>Spoken languages: </h4>
 									{ <li>{Object.values(filter.languages)}</li> }	
-								<p><img src={filter.flags.png} alt={filter.name.common}></img></p>
+								<p><img src={filter.flags.png} alt={filter.name.common} width='200px'></img></p>
+                                <Weather filter={filter.name.common}/>
 							</>
 						 )}
 					</div>
+                
+            </>
 			 
 		)
-}else if(filter.length < 10 ){
-      console.log('estoy en el segundo if');
+}else if(filter.length < 10 && filter.length === 2){
+     
       return(
             <div>
-            
-              We find: { filter.map( filter => <p key={filter.name.common}>{filter.name.common}</p> ) }
-            
-						</div>
-         
+              We find: { filter.map( filter => <p key={filter.name.common}>{filter.name.common}</p> ) }   
+			</div> 
       )
   } 
 	else {
-      console.log('estoy en el else');
+      
       return(
           <>
-         
-          We find:<p>{countries.map( (res) =>  <p key={res.name.common}>{res.name.common}</p> )}</p>
+         	<p>We find more than 10 countries, please modify your query!!</p>
           </>
       )
   }
