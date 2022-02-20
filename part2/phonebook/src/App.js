@@ -54,8 +54,6 @@ const App = () => {
   //delete person
  const delUser = ( id )=>{
 
-    console.log('id-person', id);
-    console.log('click');
     deleteUser(id)
     .then( ( response ) => {
           console.log('response data en deluser', delUser);
