@@ -1,75 +1,76 @@
 
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Filter } from './components/Filter';
 import PersonForm from './components/PersonForm';
 import ShowContacts from './components/ShowContacts';
-import getData from './services/getData';
-
-
-
+import { addUser, getUser, updateUser, deleteUser } from './services/userServices';
 
 
 const App = () => {
-  
-  
-  
-  const [ persons, setPersons ] = useState([
-    {name: "Mari Popins", number: "42-425212512"}
-  ]) 
+    
+  const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ filter, setFilter ] = useState([]);
   
   useEffect( ()=>{
-    axios.get('http://localhost:3001/persons')
-      .then( (response)=>{
-        console.log( response.data);
-        const persons = response.data;
-        setPersons(persons);
+    getUser().then( (response)=>{
+      setPersons(response.data)
     })
   }, []);
   
-  const personForm = (event)=>{
-    
-    event.preventDefault();
-    
-    for(let user of persons){
-      
-      if(user.name.includes(newName) || user.number.includes(newNumber)){
-        
-        alert(`${newName}${newNumber} is already added to phonebook`)
-        break
-        
-      }else{
-        const addPerson = {
-          name: newName,
-          number: newNumber,
-        }
-        setPersons(persons.concat(addPerson));
+  const personForm = (event) => {
 
-        setNewName(''); //element controlled by REACT 
-        setNewNumber(''); //element controlled by REACT 
-        
+    event.preventDefault();
+
+    const newObject = {
+      name: newName,
+      number: newNumber,
+    }
+
+    let nombre = persons.map( name => name.name);
+    let numero = persons.map( numero => numero.number);
+
+    if (nombre.includes(newName) || numero.includes(newNumber)) {
+
+      if(window.confirm(`${newName}${newNumber} is already added to phonebook, replace the old number with the new one?`)){
+
+        let id = persons[0].id;
+        updateUser(id, newObject)
+          .then(response => console.log('response data', response.data));
       }
+
+    } else {
+
+      addUser(newObject)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+        })
+
+      setNewName(''); //element controlled by REACT 
+      setNewNumber(''); //element controlled by REACT 
     }
   }
+  //delete person
+ const delUser = ( id )=>{
+
+    console.log('id-person', id);
+    console.log('click');
+    deleteUser(id)
+    .then( ( response ) => {
+          console.log('response data en deluser', delUser);
+          window.confirm( 'Delete ', response.data)
+        })
+  }
+ 
   
   const handleFilter = (event) => {
     
-    //
-
-      console.log('valor lleno');
-      setFilter(event.target.value);
-      
-      const regExpresion = new RegExp(filter, 'i');
-      const personFiltered = () => persons.filter( person => person.name.match(regExpresion));
-      setPersons(personFiltered);
-    }  
-    console.log(filter);
+      let value = event.target.value;     
+      let personFiltered =  persons.filter( person => person.name.toLowerCase().includes( value.toLowerCase() ))
+      setFilter(personFiltered);
+  }  
     
-  
-  
   const handleNewPerson = (event)=>{
         
      setNewName(event.target.value);
@@ -84,14 +85,16 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Filter value={filter} onChange={handleFilter} setFilter={setFilter} setPersons={setPersons}  />
+      <Filter onChange={handleFilter} setFilter={setFilter} setPersons={setPersons}/>
     
       <PersonForm  persons={persons} personForm={personForm} handleNewNumber={handleNewNumber} handleNewPerson={handleNewPerson} newName={newName} newNumber={newNumber} />
  
       <h2>Numbers</h2>
 
-      <ShowContacts persons={persons}/>
+      <ShowContacts persons={persons} filter={filter} delUser={delUser}/>
 
+
+      <br></br>
       <div>debugName: {newName}</div>
       <div>debugNumber: {newNumber}</div>
       ...

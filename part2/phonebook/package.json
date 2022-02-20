@@ -38,6 +38,8 @@
     ]
   },
   "devDependencies": {
-    "json-server": "^0.17.0"
+    "favicons-webpack-plugin": "^5.0.2",
+    "json-server": "^0.17.0",
+    "webpack-pwa-manifest": "^4.3.0"
   }
 }
