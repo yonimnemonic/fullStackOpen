@@ -1,9 +1,11 @@
 
 import React, { useEffect, useState } from 'react'
 import { Filter } from './components/Filter';
+import { Notifications } from './components/Notifications';
 import PersonForm from './components/PersonForm';
 import ShowContacts from './components/ShowContacts';
 import { addUser, getUser, updateUser, deleteUser } from './services/userServices';
+
 
 
 const App = () => {
@@ -12,6 +14,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ filter, setFilter ] = useState([]);
+  const [notification, setNotification] = useState(null);
+
   
   useEffect( ()=>{
     getUser().then( (response)=>{
@@ -32,23 +36,47 @@ const App = () => {
     let numero = persons.map( numero => numero.number);
 
     if (nombre.includes(newName) || numero.includes(newNumber)) {
+      let id = persons[0].id;
 
       if(window.confirm(`${newName}${newNumber} is already added to phonebook, replace the old number with the new one?`)){
 
-        let id = persons[0].id;
         updateUser(id, newObject)
-          .then(response => console.log('response data', response.data));
-      }
+          .then(response => {
+            console.log(response.data);
+            setNotification(`${newName} modified in the phonebook`);
+            setNewName(''); 
+            setNewNumber('');
+          })
+          .catch( error => {
+            console.log('error: ', error); 
+            setNotification(`[ERROR]${newName} has been removed from server`);
+            setNewName(''); 
+            setNewNumber('');
+          });
+  
+        }
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000);
 
     } else {
 
       addUser(newObject)
         .then((response) => {
           setPersons(persons.concat(response.data));
+          setNotification(`${newName} added to the phonebook`);
+          setNewName(''); //element controlled by REACT 
+          setNewNumber(''); //element controlled by REACT 
+        }).catch( error => {
+          console.log(`[ERROR]adding ${newName} to the phonebook`);
+          setNewName(''); 
+          setNewNumber('');
+
         })
 
-      setNewName(''); //element controlled by REACT 
-      setNewNumber(''); //element controlled by REACT 
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
     }
   }
   //delete person
@@ -56,8 +84,11 @@ const App = () => {
 
     deleteUser(id)
     .then( ( response ) => {
-          console.log('response data en deluser', delUser);
           window.confirm( 'Delete ', response.data)
+
+        }).catch( error =>{
+          console.log(error);
+          setNotification(`[ERROR]${newName} has been removed from server`);
         })
   }
  
@@ -82,6 +113,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notifications notification={notification}/>
 
       <Filter onChange={handleFilter} setFilter={setFilter} setPersons={setPersons}/>
     
@@ -95,7 +127,6 @@ const App = () => {
       <br></br>
       <div>debugName: {newName}</div>
       <div>debugNumber: {newNumber}</div>
-      ...
     </div>
   )
 }
