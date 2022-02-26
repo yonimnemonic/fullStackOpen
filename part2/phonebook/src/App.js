@@ -14,7 +14,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ filter, setFilter ] = useState([]);
-  const [notification, setNotification] = useState(null);
+  const [ notification, setNotification ] = useState(null);
 
   
   useEffect( ()=>{
@@ -36,28 +36,39 @@ const App = () => {
     let numero = persons.map( numero => numero.number);
 
     if (nombre.includes(newName) || numero.includes(newNumber)) {
-      let id = persons[0].id;
-
-      if(window.confirm(`${newName}${newNumber} is already added to phonebook, replace the old number with the new one?`)){
-
+      
+       if(window.confirm(`${newName}${newNumber} is already added to phonebook, replace the old number with the new one?`)){
+      
+        let id = persons[0].id;
         updateUser(id, newObject)
           .then(response => {
-            console.log(response.data);
-            setNotification(`${newName} modified in the phonebook`);
+           
+            console.log('user  modified',response.data);
+            setPersons(
+              persons.map((persons) => (persons.id !== id ? persons : response.data))
+            )
+            console.log(persons)
+
+          setNotification(`${newName} modified in the phonebook`);
             setNewName(''); 
             setNewNumber('');
+            console.log(persons)
+            setTimeout(() => {
+              setNotification(null)
+            }, 3000);            
+            
           })
           .catch( error => {
             console.log('error: ', error); 
             setNotification(`[ERROR]${newName} has been removed from server`);
-            setNewName(''); 
-            setNewNumber('');
+            
+            setTimeout(() => {
+              setNotification(null)
+              setNewName(''); 
+              setNewNumber('');
+            }, 3000);
           });
-  
-        }
-        setTimeout(() => {
-          setNotification(null)
-        }, 3000);
+      }
 
     } else {
 
@@ -69,6 +80,7 @@ const App = () => {
           setNewNumber(''); //element controlled by REACT 
         }).catch( error => {
           console.log(`[ERROR]adding ${newName} to the phonebook`);
+          console.log(error);
           setNewName(''); 
           setNewNumber('');
 
@@ -79,18 +91,22 @@ const App = () => {
       }, 3000)
     }
   }
-  //delete person
- const delUser = ( id )=>{
+//delete person
+const delUser = ( id )=>{
+    if(window.confirm( `User will be deleted` )){
+      deleteUser(id)
+      .then( ( response ) => {
+           console.log(response.data); 
+           setNotification(`User has been deleted from notebook`)
 
-    deleteUser(id)
-    .then( ( response ) => {
-          window.confirm( 'Delete ', response.data)
+          }).catch( error =>{
+            console.log(error);
+            setNotification(`[ERROR]${newName} has been removed from server`);
+          })
 
-        }).catch( error =>{
-          console.log(error);
-          setNotification(`[ERROR]${newName} has been removed from server`);
-        })
-  }
+    }
+    
+ }
  
   
   const handleFilter = (event) => {
@@ -121,7 +137,9 @@ const App = () => {
  
       <h2>Numbers</h2>
 
-      <ShowContacts persons={persons} filter={filter} delUser={delUser}/>
+      <ShowContacts persons={persons} filter={filter} delUser={delUser} />
+
+        
 
 
       <br></br>

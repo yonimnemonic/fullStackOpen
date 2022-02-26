@@ -8,7 +8,7 @@ const PersonForm = ({personForm, handleNewNumber, handleNewPerson, newName, newN
     <form onSubmit={personForm}>
         <h2>Add a New</h2>
         Name: <input onChange={handleNewPerson} value={newName} /><br/>
-        Number: <input onChange={handleNewNumber}  value={newNumber}/>
+        Number: <input onChange={handleNewNumber}  value={newNumber}/><br/>
         <button>add</button>
     </form>
     )
