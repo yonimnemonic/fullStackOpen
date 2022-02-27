@@ -139,9 +139,6 @@ const delUser = ( id )=>{
 
       <ShowContacts persons={persons} filter={filter} delUser={delUser} />
 
-        
-
-
       <br></br>
       <div>debugName: {newName}</div>
       <div>debugNumber: {newNumber}</div>
