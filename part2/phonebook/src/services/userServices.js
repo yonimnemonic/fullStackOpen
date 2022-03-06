@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const baseURL = 'https://infinite-harbor-84944.herokuapp.com/api/persons';
+const baseURL = '/api/persons';
 
 export const getUser = () => {
     return axios.get(baseURL)
