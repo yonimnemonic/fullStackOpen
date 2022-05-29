@@ -10,7 +10,7 @@ const ShowContacts = ({persons, filter, delUser})=>{
                <form>
                {persons.map( (name, i) => 
                
-                  <p key={i}>{name.name}: {name.number} <button  onClick={ () => delUser(name.id)}> delete</button></p>
+                  <p key={i}>{name.name}: {name.phone} <button  onClick={ () => delUser(name.id)}> delete</button></p>
                
                )}
                </form>
@@ -20,7 +20,7 @@ const ShowContacts = ({persons, filter, delUser})=>{
               return(
               
                <form key={filter[0].name}>
-                  <p>{filter[0].name} : {filter[0].number} <button onClick={ () => delUser(filter[0].id)}>delete</button></p> 
+                  <p>{filter[0].name} : {filter[0].phone} <button onClick={ () => delUser(filter[0].id)}>delete</button></p> 
                <br></br>
                </form>
              
@@ -29,7 +29,7 @@ const ShowContacts = ({persons, filter, delUser})=>{
          return(
             <form >
             {persons.map( (name, i) => 
-            <p key={i} >{name.name}: {name.number} <button  onClick={ () => delUser(name.id)}>delete</button>
+            <p key={i} >{name.name}: {name.phone} <button  onClick={ () => delUser(name.id)}>delete</button>
                </p>
              )}
 

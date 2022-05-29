@@ -1,13 +1,13 @@
 import axios from "axios";
 
 
-const baseURL = '/api/persons';
+const baseURL = 'http://localhost:3001/api/persons';
 
 export const getUser = () => {
     return axios.get(baseURL)
 }
 
-export const addUser = newObject => {
+export const addUser = (newObject) => {
     return axios.post(baseURL, newObject)
 }
 
