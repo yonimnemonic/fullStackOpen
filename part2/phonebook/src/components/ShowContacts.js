@@ -1,10 +1,7 @@
 import React from 'react'
 
-
-
 const ShowContacts = ({persons, filter, delUser})=>{
    
-
    if(filter.length === 0){
             return(
                <form>

@@ -26,63 +26,57 @@ const App = () => {
   const personForm = (event) => {
 
     event.preventDefault();
+
     const newObject = {
+      
       name: newName,
       phone: newPhone,
     }
-    const existingPerson = persons.find(person => person.name === newName);  
-    const existingPhone = persons.find(person => person.phone === newPhone);  
-    let nombre = persons.map( name => name.name);
 
+ 
+    let nombre = persons.map( name => name.name);
     let phone = persons.map( phone => phone.phone);
 
-    if (nombre.includes(existingPerson) || phone.includes(existingPhone)) {
+    if (nombre.includes(newName) || phone.includes(newPhone)) {
       
        if(window.confirm(`${newName}${newPhone} is already added to phonebook, replace the old number with the new one?`)){
-      
-        let id = persons[0].id;
-        updateUser(id, newObject)
+
+      const id = persons.find(person => person.name === newName).id;
+
+        updateUser(id, newObject) //error aqui envia el id del primer objeto
           .then(response => {
             console.log('response: ', response);
             console.log('User has been modified',response.data);
             setPersons(
-              persons.map((persons) => (persons.id !== id ? persons : response.data))
+              persons.map((persons) => (persons.id === id ? response.data : persons ))
             )
-            console.log(persons)
-
-          setNotification(`${newName} modified in the phonebook`);
-          console.log(persons)
-          setTimeout(() => {
-            setNotification(null)
-          }, 3000);            
-          setNewName(''); 
-          setNewPhone('');
-            
-          })
-          .catch( error => {
-            console.log('error: ', error); 
-            setNotification(`[ERROR]${newName} has been removed from server`);
+            setNotification(`${newName} has been updated in the phonebook`);
+            setNewName(''); //element controlled by REACT 
+            setNewPhone(''); //element controlled by REACT )
             setTimeout(() => {
               setNotification(null)
-              setNewName(''); 
-              setNewPhone('');
-            }, 3000);
-          });
-      }
-
+            }, 3000);        
+    })
+      .catch( error => {
+        console.log('error: ', error); 
+        setNotification(`[ERROR]${newName} has been removed from server`);
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000);
+      });
+  }
     } else {
-
-      addUser(newObject)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNotification(`${newName} added to the phonebook`);
-          setNewName(''); //element controlled by REACT 
-          setNewPhone(''); //element controlled by REACT 
-        }).catch( error => {
-          console.log(`[ERROR]adding ${newName} to the phonebook`);
-          console.log(error);
-          setNewName(''); 
-          setNewPhone('');
+    addUser(newObject)
+          .then((response) => {
+            setPersons(persons.concat(response.data));
+            setNotification(`${newName} added to the phonebook`);
+            setNewName(''); //element controlled by REACT 
+            setNewPhone(''); //element controlled by REACT 
+          }).catch( error => {
+            console.log(`[ERROR]adding ${newName} to the phonebook`);
+            console.log(error);
+            setNewName(''); 
+            setNewPhone('');
 
         })
 
