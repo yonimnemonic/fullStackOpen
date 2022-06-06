@@ -32,8 +32,6 @@ const App = () => {
       name: newName,
       phone: newPhone,
     }
-
- 
     let nombre = persons.map( name => name.name);
     let phone = persons.map( phone => phone.phone);
 
@@ -41,25 +39,26 @@ const App = () => {
       
        if(window.confirm(`${newName}${newPhone} is already added to phonebook, replace the old number with the new one?`)){
 
-      const id = persons.find(person => person.name === newName).id;
+        const id = persons.find(person => person.name === newName).id;
 
-        updateUser(id, newObject) //error aqui envia el id del primer objeto
+        updateUser(id, newObject)
           .then(response => {
-            console.log('response: ', response);
-            console.log('User has been modified',response.data);
+            console.log('response: ', response)
+            console.log('User has been modified',response.data)
             setPersons(
-              persons.map((persons) => (persons.id === id ? response.data : persons ))
-            )
-            setNotification(`${newName} has been updated in the phonebook`);
-            setNewName(''); //element controlled by REACT 
-            setNewPhone(''); //element controlled by REACT )
+              persons.map( persons => persons.id !== id ? persons  : newObject )
+              )
+              console.log('persons: ', persons)
+            setNotification(`${newName} has been updated in your phonebook`);
+            setNewName('') //element controlled by REACT 
+            setNewPhone('') 
             setTimeout(() => {
               setNotification(null)
             }, 3000);        
     })
       .catch( error => {
         console.log('error: ', error); 
-        setNotification(`[ERROR]${newName} has been removed from server`);
+        setNotification(`[ERROR]${newName} could not be added to the phonebook`);
         setTimeout(() => {
           setNotification(null)
         }, 3000);
@@ -68,15 +67,15 @@ const App = () => {
     } else {
     addUser(newObject)
           .then((response) => {
-            setPersons(persons.concat(response.data));
-            setNotification(`${newName} added to the phonebook`);
-            setNewName(''); //element controlled by REACT 
-            setNewPhone(''); //element controlled by REACT 
+            setPersons(persons.concat(response.data))
+            setNotification(`${newName} added to the phonebook`)
+            setNewName('') //element controlled by REACT 
+            setNewPhone('') 
           }).catch( error => {
-            console.log(`[ERROR]adding ${newName} to the phonebook`);
-            console.log(error);
-            setNewName(''); 
-            setNewPhone('');
+            console.log(`[ERROR]adding ${newName} to the phonebook`)
+            console.log(error)
+            setNewName('') 
+            setNewPhone('')
 
         })
 
@@ -90,19 +89,17 @@ const delUser = ( id )=>{
     if(window.confirm( `User will be deleted` )){
       deleteUser(id)
       .then( ( response ) => {
-           console.log(response.data); 
+           console.log(response.data) 
            setNotification(`User has been deleted from notebook`)
 
           }).catch( error =>{
-            console.log(error);
-            setNotification(`[ERROR]${newName} has been removed from server`);
+            console.log(error)
+            setNotification(`[ERROR]${newName} has been removed from server`)
           })
 
     }
     
- }
- 
-  
+ }  
   const handleFilter = (event) => {
     
       let value = event.target.value;     
@@ -112,27 +109,22 @@ const delUser = ( id )=>{
     
   const handleNewPerson = (event)=>{
         
-     setNewName(event.target.value);
+     setNewName(event.target.value)
   
   }
   const handleNewNumber = (event)=>{
         
-    setNewPhone(event.target.value); 
+    setNewPhone(event.target.value) 
   
   }
   return (
     <div>
       <h2>Phonebook</h2>
       <Notifications notification={notification}/>
-
       <Filter onChange={handleFilter} setFilter={setFilter} setPersons={setPersons}/>
-    
-      <PersonForm  persons={persons} personForm={personForm} handleNewNumber={handleNewNumber} handleNewPerson={handleNewPerson} newName={newName} newNumber={newPhone} />
- 
+      <PersonForm  persons={persons} personForm={personForm} handleNewNumber={handleNewNumber} handleNewPerson={handleNewPerson} newName={newName} newPhone={newPhone} />
       <h2>Numbers</h2>
-
       <ShowContacts persons={persons} filter={filter} delUser={delUser} />
-
       <br></br>
       <div>debugName: {newName}</div>
       <div>debugNumber: {newPhone}</div>
