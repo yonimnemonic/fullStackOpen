@@ -23,7 +23,7 @@ const successStyle = {
 
 
 export const Notifications = ( {notification} ) => {
-    console.log('notification', notification);
+   // console.log('notification', notification);
 
 if(notification === null){
     return null

@@ -73,7 +73,8 @@ const App = () => {
             setNewPhone('') 
           }).catch( error => {
             console.log(`[ERROR]adding ${newName} to the phonebook`)
-            console.log(error)
+            setNotification(`[ERROR] ${error.response.data.substring(128,293)}`)
+            console.log(error.response)
             setNewName('') 
             setNewPhone('')
 
