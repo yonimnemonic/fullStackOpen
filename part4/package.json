@@ -1,0 +1,26 @@
+{
+  "name": "part4",
+  "version": "1.0.0",
+  "description": "FullStack open part4",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yonimnemonic/fullStackOpen.git"
+  },
+  "author": "Agustín Martínez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yonimnemonic/fullStackOpen/issues"
+  },
+  "homepage": "https://github.com/yonimnemonic/fullStackOpen#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.2",
+    "nodemon": "^2.0.19"
+  }
+}
