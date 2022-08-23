@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const { clearScreenDown } = require('readline')
+require('dotenv').config()
 
 
 const blogSchema = new mongoose.Schema({
@@ -11,27 +13,38 @@ const blogSchema = new mongoose.Schema({
   url: String,
   likes: Number
 })
+//transform id to string format
+blogSchema.set( 'toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
 
 const Blog = mongoose.model('Blog', blogSchema)
 
-//const mongoUrl = process.env.MONGODB_URI 
-const mongoUrl = 'mongodb+srv://yonimnemonic:Lb7x9Fr12@agusclustertest.bknct.mongodb.net/Posts_DB?retryWrites=true&w=majority'
+const mongoUrl = process.env.MONGODB_URI
+
 mongoose.connect(mongoUrl)
-
-app.use(cors())
-app.use(express.json())
-
+  .then( ()=> {
+  }).catch( err => {
+    console.log(err)
+})
+  
+  app.use(cors())
+  app.use(express.json())
+  
 app.get('/api/blogs', (request, response) => {
-  Blog
+    Blog
     .find({})
-    .then(blogs => {
+    .then(blogs => { 
       response.json(blogs)
     })
 })
 
 app.post('/api/blogs', (request, response) => {
   const blog = new Blog(request.body)
-
   blog
     .save()
     .then(result => {
