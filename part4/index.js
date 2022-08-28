@@ -1,11 +1,7 @@
+const app = require('./app')
 const http = require('http')
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
+const config = require('./utils/config')
 const logger = require('./utils/logger')
-const { clearScreenDown } = require('readline')
-const { config } = require('dotenv')
 
 
 const server = http.createServer(app)
