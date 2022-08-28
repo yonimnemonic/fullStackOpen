@@ -15,8 +15,9 @@ const blogSchema = new mongoose.Schema({
     }
   })
   
-  const Blog = mongoose.model('Blog', blogSchema)
+  const blog = mongoose.model('Blog', blogSchema)
   
   const mongoUrl = process.env.MONGODB_URI
   
-  
+  module.exports = blog
+ 
