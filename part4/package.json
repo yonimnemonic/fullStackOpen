@@ -4,8 +4,12 @@
   "description": "FullStack open part4",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "jest --verbose"
+    "start": " NODE_ENV=production node index.js",
+    "dev": " NODE_ENV=development nodemon index.js",
+    "deploy": "git push heroku master",
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint .",
+    "test": " NODE_ENV=test testEnvironment=node jest --verbose --silent --runInBand --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -20,11 +24,14 @@
   "dependencies": {
     "cors": "2.8.5",
     "express": "4.18.1",
+    "express-async-errors": "^3.1.1",
     "mongoose": "6.5.2",
     "nodemon": "2.0.19"
   },
   "devDependencies": {
-    "jest": "29.0.1"
+    "": "^7.0.3",
+    "jest": "29.0.1",
+    "supertest": "^6.2.4"
   },
   "jest": {
     "testEnvironment": "node"

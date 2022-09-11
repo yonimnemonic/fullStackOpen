@@ -12,8 +12,6 @@ const totalLikes = (blogs) => {
   return blogs.reduce((total, blog) => total + blog.likes, 0);
 }
 //favoriteBlog
-//Define una nueva función favoriteBlog que recibe una lista de blogs como parámetro.
-//La función descubre qué blog tiene más likes. Si hay muchos favoritos, basta con devolver uno de ellos.
 const favoriteBlog = (blogs) => {
   return blogs.length === 0
   ? {}
