@@ -9,7 +9,7 @@
     "deploy": "git push heroku master",
     "logs:prod": "heroku logs --tail",
     "lint": "eslint .",
-    "test": " NODE_ENV=test testEnvironment=node jest --verbose --silent --runInBand --detectOpenHandles"
+    "test": " NODE_ENV=test testEnvironment=node jest --verbose --runInBand"
   },
   "repository": {
     "type": "git",
